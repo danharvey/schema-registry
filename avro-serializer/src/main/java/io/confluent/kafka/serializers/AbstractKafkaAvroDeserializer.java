@@ -30,14 +30,6 @@ import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientExcept
 public abstract class AbstractKafkaAvroDeserializer extends AbstractKafkaAvroSerDe {
   private final DecoderFactory decoderFactory = DecoderFactory.get();
 
-  private ByteBuffer getByteBuffer(byte[] payload) {
-    ByteBuffer buffer = ByteBuffer.wrap(payload);
-    if (buffer.get() != MAGIC_BYTE) {
-      throw new SerializationException("Unknown magic byte!");
-    }
-    return buffer;
-  }
-
   protected Object deserialize(byte[] payload) throws SerializationException {
     int id = -1;
     if (payload == null) {
