@@ -4,16 +4,24 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.confluent</groupId>
-        <artifactId>kafka-schema-registry-parent</artifactId>
-        <version>1.0-state</version>
-    </parent>
-
     <groupId>io.confluent</groupId>
     <artifactId>kafka-avro-serializer</artifactId>
     <packaging>jar</packaging>
     <name>kafka-avro-serializer</name>
+    <version>1.0-state</version>
+
+    <properties>
+        <jersey.version>2.6</jersey.version>
+        <confluent-common.version>1.0</confluent-common.version>
+        <kafka.version>0.8.2.0-cp</kafka.version>
+        <kafka.scala.version>2.10</kafka.scala.version>
+        <log4j.version>1.7.6</log4j.version>
+        <restutils.version>1.0</restutils.version>
+        <avro.version>1.7.7</avro.version>
+        <jackson.version>2.4.3</jackson.version>
+        <junit.version>4.11</junit.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -40,4 +48,52 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>5.0.0.RELEASE</version>
+            </extension>
+
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>com.ning.maven.plugins</groupId>
+                <artifactId>maven-duplicate-finder-plugin</artifactId>
+                <version>1.0.8</version>
+                <configuration>
+                    <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
+                    <printEqualFiles>true</printEqualFiles>
+                    <ignoredResources>
+                        <ignoredResource>META-INF/jersey-module-version</ignoredResource>
+                        <ignoredResource>about.html</ignoredResource>
+                    </ignoredResources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- State Repositories -->
+    <repositories>
+        <repository>
+            <id>aws-release</id>
+            <name>AWS Release Repository</name>
+            <url>s3://state-maven-repo-eu-west-1/release</url>
+        </repository>
+        <repository>
+            <id>aws-snapshot</id>
+            <name>AWS Snapshot Repository</name>
+            <url>s3://state-maven-repo-eu-west-1/snapshot</url>
+        </repository>
+    </repositories>
 </project>
